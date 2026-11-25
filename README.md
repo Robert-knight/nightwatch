@@ -1,5 +1,7 @@
 # 守夜 NIGHTWATCH
 
+**线上地址：https://robert-knight.github.io/nightwatch/**
+
 一个家庭安防公司的官网。它卖给你一台摄像机。
 你往下滚，会发现它一直在拍的不是你的家。
 
@@ -129,55 +131,33 @@ jumpscare 之所以响，是因为它走的是另一条路：`duck()` → `punch
 
 具体改动：主增益上限 0.74 → 0.27；次低频层再降（`droneGain` 0.17→0.10、27.5 Hz 正弦 0.09→0.05），这是耳机上"耳朵疼"的主要来源；空气层 0.05+0.5L → 0.02+0.16L（嘶声不再压在最上面）；出口加了一级真正的限幅器（-6 dB / 20:1）防止瞬态过冲；惊吓的 punch 提到 1.0、尖啸增益 0.75→1.0；惊吓之后房间保持安静一分钟，不再立刻涨回来。
 
-## 怎么分享
+## 部署
 
-整个站是纯静态的：三个文件 + 一个预览图，没有构建、没有依赖、没有外部请求。任何静态托管都能直接放上去。
+已发布在 GitHub Pages：仓库 `Robert-knight/nightwatch`，`main` 分支根目录。
 
-### GitHub Pages
+```
+https://robert-knight.github.io/nightwatch/
+```
+
+改动之后：
 
 ```bash
-git init
+cd C:\Users\lenovo\Documents\GitHub\nightwatch
 git add .
-git commit -m "守夜 NIGHTWATCH"
-git branch -M main
-git remote add origin https://github.com/<你的用户名>/nightwatch.git
-git push -u origin main
+git commit -m "改了什么"
+git push
 ```
 
-然后到仓库 **Settings → Pages**：Source 选 `Deploy from a branch`，Branch 选 `main`、目录 `/ (root)`，保存。一分钟左右上线：
+Pages 会在 30 秒到 1 分钟左右自动重建。仓库设置里 `Settings → Pages` 已配置为 `main` / `/ (root)`。
 
-```
-https://<你的用户名>.github.io/nightwatch/
-```
-
-仓库名如果想短一点，可以让它等于 `<用户名>.github.io`，网址就是 `https://<用户名>.github.io/`。
-
-所有引用都是相对路径（`style.css`、`main.js`、`og.jpg`），放在子目录里也能正常跑，不需要改任何东西。`.nojekyll` 已经放好了，可以跳过 Jekyll 处理。
-
-### 更快的办法
-
-- **Netlify Drop**：把整个文件夹拖到 app.netlify.com/drop，立刻拿到一个网址（要长期保留需登录）。
-- **Cloudflare Pages**：连 GitHub 仓库或直接上传，免费、国内访问通常比 GitHub Pages 稳。
-- **发文件**：打包成 zip 直接发，对方解压后双击 `index.html` 也能看（但 `file://` 下音频解锁和滚动行为因浏览器而异，建议还是用网址）。
+> 这台机器有一个坑：git 全局配了 `socks5://127.0.0.1:7897`，而 Git Credential Manager 的 .NET 栈不支持 socks5，会导致 `github login` 直接报错。登录时临时清掉即可：
+> `git -c http.proxy= -c https.proxy= credential-manager github login`
 
 ### 分享时提醒一句
 
-- **点「进入官网」之后才有声音**——这是浏览器的自动播放限制，不是坏了。
+- **点「进入官网」之后才有声音**——浏览器的自动播放限制，不是坏了。
 - 页面里有**突发强音和闪烁画面**，最好让朋友戴耳机、别在深夜外放。
 - 桌面浏览器效果最完整；手机上能看，但瞳孔追踪、部分视差会弱化。
-
-### 仓库里放什么
-
-| 文件 | 需要吗 |
-| --- | --- |
-| `index.html` / `style.css` / `main.js` | 必须 |
-| `og.jpg` | 建议：链接分享时的预览图 |
-| `README.md` | 建议 |
-| `screens/` | 可选，5.3 MB，只是截图 |
-| `.nojekyll` | GitHub Pages 用得上 |
-
-嫌仓库大的话，把 `screens/` 删掉或加进 `.gitignore` 即可，不影响网站。
-
 
 ## 调试
 
